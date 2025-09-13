@@ -1037,7 +1037,7 @@ class PicoinMarket {
     filterPanel.classList.add('flex')
     
     // 지역 데이터 로드
-    this.populateLocationData()
+    this.populateLocationData(); this.ensureLocationSelectsState();
   }
 
   // 필터 패널 숨기기
@@ -1770,7 +1770,7 @@ class PicoinMarket {
       
       // 지역 데이터 로드
       console.log('필터 패널 표시 후 지역 데이터 로드 시작')
-      this.populateLocationData()
+      this.populateLocationData(); this.ensureLocationSelectsState();
       
       // 지역 선택 요소들이 제대로 있는지 확인
       const citySelect = document.getElementById('filterCity')
@@ -2332,7 +2332,7 @@ class PicoinMarket {
       filterPanel.classList.add('flex')
       
       // 지역 데이터 초기화
-      this.populateLocationData()
+      this.populateLocationData(); this.ensureLocationSelectsState();
     }
     
     if (filterSidebar) {
@@ -2535,5 +2535,24 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initializeApp)
 } else {
   // 이미 로드된 경우 즉시 실행
-  initializeApp()
+  
+
+  // 사이드바 상단의 활성 필터 태그들을 다시 그립니다.
+  renderActiveFilters() {
+    try {
+      const filtersDiv = document.getElementById('activeFilters');
+      if (!filtersDiv) return;
+      filtersDiv.innerHTML = '';
+      const loc = document.getElementById('filterLocation')?.value || '';
+      if (loc) {
+        const tag = document.createElement('span');
+        tag.className = 'filter-tag';
+        tag.textContent = `📍 ${loc}`;
+        filtersDiv.appendChild(tag);
+      }
+    } catch (e) {
+      console.warn('renderActiveFilters 실패:', e);
+    }
+  }
+initializeApp()
 }
